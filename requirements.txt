@@ -17,3 +17,5 @@ keybert
 git+https://github.com/LIAAD/yake
 plotly
 datetime
+requests
+json

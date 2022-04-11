@@ -11,6 +11,7 @@ warnings.filterwarnings("ignore")
 import yake
 import streamlit as st
 from transformers import pipeline
+import requests
 
 
 def load_sentiment_classifier():
@@ -91,4 +92,11 @@ def NER_extractor_from_transformer(ner_dictionary):
             return (people, locations, organizations)
                 
     return (people, locations, organizations)
+
+
+def get_predictions_from_bert_api(string, url = 'http://localhost:80/bert'):
+    ''' Get predictions from bert API '''
+    predictions = requests.post(url, data = {'text':'Economic impact in the UK'})
+    
+    return predictions.json()
 

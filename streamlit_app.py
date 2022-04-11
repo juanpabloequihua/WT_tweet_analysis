@@ -3,6 +3,7 @@
 
 
 import streamlit as st
+st.set_page_config(layout="wide")
 from utils.utilities import *
 from utils.query_similar import *
 import plotly.express as px 
@@ -13,6 +14,8 @@ filters = st.container()
 dataset = st.container()
 stats = st.container()
 query_string = st.container()
+bert_for_string = st.container()
+
 ner_for_string = st.container()
 
 data_path = './Data/data.csv'
@@ -101,9 +104,31 @@ with query_string:
     
     input_sentence = st.text_input('Please type a string query', 'Economic struggle in the UK')
     
-    similar_tweets = get_similar_tweets_to_text_string(data.body, input_sentence, rank = 10, return_as_dataframe = True)
-    similar_tweets['keywords'] = [keyword_extractor(kw_extractor, x) for x in similar_tweets['Top similar tweets']]
+    ## Filters for number os tweets and keywords:
+    left_col,  right_col = st.columns(2)
+    n_tweets = int(left_col.text_input('How many similar tweetes would you like to see?', '10'))
+    n_kw = int(right_col.text_input('How many keywords would you like to see', '10'))
+    
+    # Display similar tweets:
+    similar_tweets = get_similar_tweets_to_text_string(data.body, input_sentence, rank = n_tweets, return_as_dataframe = True)
+    similar_tweets['keywords'] = [keyword_extractor(kw_extractor, x, top = n_kw) for x in similar_tweets['Top similar tweets']]
     st.table(similar_tweets)
+    
+with bert_for_string:
+    
+    ## Make predictions of query classes with BERT API:
+    st.subheader('Find top 3 topic predictions from Fine-tuned BERT model.')
+    st.write('Predictions of Top 3 query classes (topics) are made via a a fine-tuned BERT model trained for 5 epochs with 70% of the data provided for this task. Fine-tuning code is contained in the notebook **Aux_notebook - Fine tunning BERT for multiclass.ipynb** file. The BERT model was deployed via a Flask API listening at localhost:80 and returns the top 3 predictions for the string query. ')
+    
+    classes = get_predictions_from_bert_api(input_sentence)
+    left_col, center_col,  right_col = st.columns(3)
+    top1 = classes['Top 1']
+    top2 = classes['Top 2']
+    top3 = classes['Top 3']
+    
+    left_col.write(f'- First class in your search: {top1}')
+    center_col.write(f'- Second class in your search: {top2}')
+    right_col.write(f'- Third class in your search: {top3}')
     
 with ner_for_string:
     st.subheader('Find the entities names in top similar Tweets using BERT.')
@@ -113,6 +138,8 @@ with ner_for_string:
     
     
     """)
+    
+    ## Find Entities in top similat tweets:
     ner_output_list = [NER_extractor_from_transformer(ner_model(x)) for x in similar_tweets['Top similar tweets']]
     
     list_of_people = [people[0] for people in ner_output_list]
@@ -129,5 +156,7 @@ with ner_for_string:
     left_col.write('- People mentioned in top similar queries: {}'.format( ', '.join(list_of_people)))
     center_col.write('- Locations mentioned in top similar queries: {}'.format( ', '.join(list_of_locations)))
     right_col.write('- Organisations mentioned in top queries: {}'.format( ', '.join(list_of_organisations) ))
+    
+
     
     

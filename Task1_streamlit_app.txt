@@ -3,4 +3,5 @@ pip install virtualenv
 virtualenv python_wt
 source python_wt/bin/activate
 pip install -r requirements.txt
-streamlit run streamlit_app.py
+python3 BERT_API/bert_api.py &
+streamlit run streamlit_app.py && fg
