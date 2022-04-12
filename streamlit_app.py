@@ -8,7 +8,6 @@ from utils.utilities import *
 from utils.query_similar import *
 import plotly.express as px 
 import tokenizers
-from annotated_text import annotated_text
 
 header = st.container()
 filters = st.container()
