@@ -41,6 +41,8 @@ This command will start a BERT API to make text classification accross all 23 cl
 ```
 python3 BERT_API/bert_api.py
 ```
+**NOTE: If the fine-tuned BERT model is not already in the folder '/Fine_tuned_BERT/' the model can be downloaded from https://www.dropbox.com/scl/fo/18zy0zc6r8az5x7ultwoe/h?dl=0&rlkey=gqi93zce3vpcykinvk1x26egf **
+
 
 2. Open a new terminal and Run streamlit app:
 The app will take approximately 10 minutes to launch, as it is downloading and cashing few transformets from Hugging Face:

@@ -31,12 +31,24 @@ source python_wt/bin/activate
 ```
 
 1. Start Terminal and install requirements file:
+This step might take some time. 
 ```
 pip install -r requirements.txt
 ```
 
-2. Run streamlit app from terminal
+2. Start Fine-tuned BERT API with Flask:
+This command will start a BERT API to make text classification accross all 23 classes in data.clusters_0 for an user input string. API will be listening in port localhost:80 
 ```
+python3 BERT_API/bert_api.py
+```
+**NOTE: If the fine-tuned BERT model is not already in the folder '/Fine_tuned_BERT/' the model can be downloaded from https://www.dropbox.com/scl/fo/18zy0zc6r8az5x7ultwoe/h?dl=0&rlkey=gqi93zce3vpcykinvk1x26egf **
+
+
+2. Open a new terminal and Run streamlit app:
+The app will take approximately 10 minutes to launch, as it is downloading and cashing few transformets from Hugging Face:
+
+```
+source python_wt/bin/activate
 streamlit run streamlit_app.py
 ```
 
