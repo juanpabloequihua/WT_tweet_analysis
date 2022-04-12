@@ -8,6 +8,7 @@ from utils.utilities import *
 from utils.query_similar import *
 import plotly.express as px 
 import tokenizers
+from annotated_text import annotated_text
 
 header = st.container()
 filters = st.container()
@@ -126,9 +127,10 @@ with bert_for_string:
     top2 = classes['Top 2']
     top3 = classes['Top 3']
     
-    left_col.write(f'- First class in your search: {top1}')
-    center_col.write(f'- Second class in your search: {top2}')
-    right_col.write(f'- Third class in your search: {top3}')
+    left_col.write(f'- First class in your search: **{top1}**')
+    center_col.write(f'- Second class in your search: **{top2}**')
+    right_col.write(f'- Third class in your search: **{top3}**')
+
     
 with ner_for_string:
     st.subheader('Find the entities names in top similar Tweets using BERT.')
@@ -153,9 +155,9 @@ with ner_for_string:
     
     left_col, center_col,  right_col = st.columns(3)
     
-    left_col.write('- People mentioned in top similar queries: {}'.format( ', '.join(list_of_people)))
-    center_col.write('- Locations mentioned in top similar queries: {}'.format( ', '.join(list_of_locations)))
-    right_col.write('- Organisations mentioned in top queries: {}'.format( ', '.join(list_of_organisations) ))
+    left_col.write('- People mentioned in top similar queries: **{}**'.format( ', '.join(list_of_people)))
+    center_col.write('- Locations mentioned in top similar queries: **{}**'.format( ', '.join(list_of_locations)))
+    right_col.write('- Organisations mentioned in top queries: **{}**'.format( ', '.join(list_of_organisations) ))
     
 
     
